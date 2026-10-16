@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edito tus videos</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @font-face {
+            font-family: 'SF Pro Display';
+            src: url('font/SFPRODISPLAYREGULAR.OTF') format('opentype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        :root {
+            --wii-blue-hue: 198;
+            --wii-blue-sat: 100%;
+            --wii-blue-light: 46%;
+            
+            --cell-size: 80px;
+            --anim-duration: 10s;
+            --shadow-opacity: 0.28;
+            --gloss-opacity: 0.65;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow-x: hidden;
+            background-color: #eaf6fc;
+            font-family: 'SF Pro Display', 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+            user-select: none;
+        }
+
+        .wii-chessboard {
+            position: fixed;
+            top: -160px;
+            left: -160px;
+            width: calc(100vw + 320px);
+            height: calc(100vh + 320px);
+            z-index: 1;
+
+            background-image:
+                linear-gradient(135deg, rgba(255, 255, 255, var(--gloss-opacity)) 0%, transparent 45%, rgba(0, 110, 180, var(--shadow-opacity)) 100%),
+                linear-gradient(-45deg, rgba(0, 120, 200, calc(var(--shadow-opacity) * 0.8)) 0%, transparent 60%),
+                linear-gradient(45deg, #ffffff 25%, transparent 25%), 
+                linear-gradient(-45deg, #ffffff 25%, transparent 25%), 
+                linear-gradient(45deg, transparent 75%, #ffffff 75%), 
+                linear-gradient(-45deg, transparent 75%, #ffffff 75%);
+
+            background-size: 
+                var(--cell-size) var(--cell-size),
+                var(--cell-size) var(--cell-size),
+                var(--cell-size) var(--cell-size),
+                var(--cell-size) var(--cell-size),
+                var(--cell-size) var(--cell-size),
+                var(--cell-size) var(--cell-size);
+
+            background-position: 
+                0 0,
+                0 0,
+                0 0, 
+                0 calc(var(--cell-size) / 2), 
+                calc(var(--cell-size) / 2) calc(var(--cell-size) / -2), 
+                calc(var(--cell-size) / -2) 0;
+
+            background-color: hsl(var(--wii-blue-hue), var(--wii-blue-sat), var(--wii-blue-light));
+            animation: moveDiagonalWii var(--anim-duration) linear infinite;
+            will-change: transform;
+        }
+
+        @keyframes moveDiagonalWii {
+            0% { transform: translate3d(0, 0, 0); }
+            100% { transform: translate3d(calc(-1 * var(--cell-size)), calc(-1 * var(--cell-size)), 0); }
+        }
+
+        .wii-vignette {
+            position: fixed;
+            inset: 0;
+            z-index: 2;
+            pointer-events: none;
+            background: 
+                radial-gradient(circle at 50% 20%, rgba(255, 255, 255, 0.45) 0%, rgba(235, 248, 255, 0) 65%),
+                radial-gradient(circle at 50% 90%, rgba(0, 120, 210, 0.25) 0%, rgba(255, 255, 255, 0.6) 100%);
+        }
+
+        .wii-card {
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border: 3px solid rgba(255, 255, 255, 0.95);
+            box-shadow: 
+                0 18px 40px rgba(0, 90, 170, 0.18),
+                inset 0 2px 4px rgba(255, 255, 255, 1),
+                inset 0 -3px 6px rgba(0, 140, 230, 0.1);
+            border-radius: 32px;
+        }
+
+        .wii-img-box {
+            position: relative;
+            background: #ffffff;
+            border: 3px solid #b3e0ff;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 6px 16px rgba(0, 140, 230, 0.15), inset 0 2px 4px rgba(255,255,255,0.9);
+            transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.25s ease, border-color 0.25s ease;
+        }
+
+        .wii-img-box:hover {
+            transform: translateY(-3px) scale(1.015);
+            box-shadow: 0 12px 24px rgba(0, 160, 233, 0.28), inset 0 2px 6px rgba(255,255,255,1);
+            border-color: #00a0e9;
+        }
+
+        .contact-item {
+            background: linear-gradient(180deg, #ffffff 0%, #f0f9ff 100%);
+            border: 2px solid #b3e0ff;
+            transition: all 0.2s ease;
+        }
+
+        .contact-item:hover {
+            transform: translateX(4px);
+            border-color: #00a0e9;
+            box-shadow: 0 4px 12px rgba(0, 160, 233, 0.2);
+            background: #ffffff;
+        }
+    </style>
+</head>
+<body class="relative flex min-h-screen items-center justify-center p-4 md:p-8">
+
+    <div class="wii-chessboard"></div>
+    <div class="wii-vignette"></div>
+
+    <div class="relative z-10 w-full max-w-6xl mx-auto flex flex-col lg:flex-row gap-6 my-auto">
+        
+        <main class="wii-card flex-1 p-6 md:p-8 flex flex-col gap-6">
+            
+            <div class="flex flex-col md:flex-row gap-6">
+                
+                <div class="flex flex-col items-center shrink-0">
+                    <div class="wii-img-box w-44 h-56 flex flex-col items-center justify-center bg-sky-50">
+                        <img src="imagenes/perfil.png" alt="Avatar Mii" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://placehold.co/180x220/e0f2fe/0284c7?text=Mii+Avatar';">
+                    </div>
+                    <span class="text-xs font-bold text-sky-800/80 mt-2 bg-sky-100/80 px-3 py-1 rounded-full border border-sky-200">
+                        Bienvenido!
+                    </span>
+                </div>
+
+                <div class="flex-1 flex flex-col gap-3">
+                    
+                    <div class="h-20 md:h-24 w-full flex items-center">
+                        <img src="imagenes/logi.png" alt="Logotipo GIF" class="w-full h-full object-contain object-left block">
+                    </div>
+
+                    <div class="bg-white/90 border-2 border-sky-200 rounded-2xl p-4 flex-1 shadow-sm flex flex-col justify-between">
+                        <p class="text-sm md:text-base text-slate-700 leading-relaxed font-medium">
+                            Mi nombre es Moha, soy un editor de videos con una larga trayectoria en este sector de unos 7 años aproximadamente, actualmente tengo 18 años y soy estudiante de Telecomunicaciones. A la hora de hacer mi trabajo, mas allá de crear un video pienso en crear una experiencia para quien mire el video, hacer que el material sea lo más visualmente atractivo posible generando un sentimiento de confianza en el espectador. Trabajo con varios formatos (videoclips,tiktoks,podcasts,gameplays... lo que quieras), estoy abierto a recibir sugerencias y adaptarme al estilo que desee el cliente.
+                        </p>
+                        <span class="text-xs text-sky-500 font-semibold mt-3 self-end">
+                            ✦ Gracias por leer
+                        </span>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="bg-white/90 border-2 border-sky-200 rounded-2xl p-3 shadow-sm mt-1">
+                <h2 class="text-2xl md:text-3xl font-extrabold text-slate-900 tracking-tight">
+                    Proyectos recientes
+                </h2>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                
+                <div class="wii-img-box h-40 flex items-center justify-center p-2 bg-sky-50/50">
+                    <img src="imagenes/ejemplo1.gif" alt="Imagen 1" class="w-full h-full object-contain" onerror="this.onerror=null; this.src='https://placehold.co/300x160/e0f2fe/0284c7?text=Proyecto+1';">
+                </div>
+
+                <div class="wii-img-box h-40 flex items-center justify-center p-2 bg-sky-50/50">
+                    <img src="imagenes/ejemplo2.gif" alt="Imagen 2" class="w-full h-full object-contain" onerror="this.onerror=null; this.src='https://placehold.co/300x160/e0f2fe/0284c7?text=Proyecto+2';">
+                </div>
+
+                <div class="wii-img-box h-40 flex items-center justify-center p-2 bg-sky-50/50">
+                    <img src="imagenes/ejemplo2.gif" alt="Imagen 3" class="w-full h-full object-contain" onerror="this.onerror=null; this.src='https://placehold.co/300x160/e0f2fe/0284c7?text=Proyecto+3';">
+                </div>
+
+            </div>
+
+        </main>
+
+        <aside class="wii-card w-full lg:w-80 p-6 flex flex-col justify-between gap-6 shrink-0">
+            <div>
+                <div class="border-b-2 border-sky-200 pb-3 mb-6 text-center">
+                    <h2 class="text-2xl font-black text-slate-800 tracking-tight">
+                        opciones de contacto
+                    </h2>
+                </div>
+
+                <div class="flex flex-col gap-4">
+                    
+                    <a href="mailto:m997xd@gmail.com" target="_blank" class="contact-item p-3 rounded-2xl flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-sky-100 border border-sky-300 flex items-center justify-center shrink-0 shadow-sm overflow-hidden p-1">
+                            <img src="https://cdn-icons-png.flaticon.com/512/732/732200.png" alt="Email Icon" class="w-full h-full object-contain" onerror="this.src='https://placehold.co/40/00a0e9/ffffff?text=@';">
+                        </div>
+                        <div class="flex flex-col">
+                            <span class="text-xs font-bold text-sky-800">Correo Electrónico</span>
+                            <span class="text-xs text-slate-600 font-medium truncate">m997xd@gmail.com</span>
+                        </div>
+                    </a>
+
+                    <a href="https://instagram.com/mohaa.rbn" target="_blank" class="contact-item p-3 rounded-2xl flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-sky-100 border border-sky-300 flex items-center justify-center shrink-0 shadow-sm overflow-hidden p-1">
+                            <img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" alt="Instagram Icon" class="w-full h-full object-contain" onerror="this.src='https://placehold.co/40/00a0e9/ffffff?text=IG';">
+                        </div>
+                        <div class="flex flex-col">
+                            <span class="text-xs font-bold text-sky-800">Instagram</span>
+                            <span class="text-xs text-slate-600 font-medium truncate">mohaa.rbn</span>
+                        </div>
+                    </a>
+
+                </div>
+            </div>
+
+            <div class="text-center pt-4 border-t border-sky-200/80">
+                <span class="text-[11px] font-bold text-sky-700/70">
+                    Mohaa.rbn - 2026
+                </span>
+            </div>
+
+        </aside>
+
+    </div>
+
+    <script>
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playWiiHoverSound() {
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            
+            const osc = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(400, audioCtx.currentTime + 0.05);
+
+            gainNode.gain.setValueAtTime(0.12, audioCtx.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
+
+            osc.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.05);
+        }
+
+        document.addEventListener('mouseenter', (e) => {
+            const targetElement = e.target.closest('.wii-img-box, .contact-item');
+            if (targetElement) {
+                playWiiHoverSound();
+            }
+        }, true);
+    </script>
+</body>
+</html>
